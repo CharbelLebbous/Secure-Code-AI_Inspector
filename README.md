@@ -80,7 +80,7 @@ Run AI tab:
 
 Run Baseline tab:
 
-![Run Baseline](docs/ui_run_baseline_results.png)
+![Run Baseline](docs/ui_artifacts_downloads.png)
 
 Compare tab:
 
@@ -88,7 +88,7 @@ Compare tab:
 
 Artifacts tab:
 
-![Artifacts](docs/ui_artifacts_downloads.png)
+![Artifacts](docs/ui_run_baseline_results.png)
 
 Settings and Help tab:
 
