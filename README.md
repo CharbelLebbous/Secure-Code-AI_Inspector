@@ -1,6 +1,6 @@
 # Secure Code Inspector
 
-AI Workflow: Secure Code Analysis, Semgrep Baseline, and OWASP Comparison.
+AI workflow for secure code analysis with OWASP mapping, Semgrep baseline, and AI-assisted comparison.
 
 Primary interface: Streamlit web app (`web_app.py`)  
 Fallback interface: CLI (`python -m secure_inspector ...`)
@@ -9,13 +9,13 @@ Fallback interface: CLI (`python -m secure_inspector ...`)
 
 https://secure-code-aiinspector.streamlit.app/
 
-## What This Project Does
+## Features
 
-- Scans a fixed source-code scope from an uploaded ZIP.
-- Uses a configurable multi-agent AI pipeline to detect security issues.
-- Maps findings to OWASP Top 10 categories.
-- Generates actionable fixes with confidence scores and evidence.
-- Runs Semgrep baseline and compares AI vs baseline with metrics.
+- ZIP-based repository scanning (fixed-scope, reproducible workflow).
+- Multi-agent AI pipeline with configurable OWASP categories.
+- Structured findings with file/line, risk summary, fix recommendation, confidence, and evidence.
+- Semgrep baseline on the same scope.
+- AI-assisted comparison report with precision/recall, false positives, and misses.
 
 Generated artifacts:
 
@@ -24,7 +24,7 @@ Generated artifacts:
 - `outputs/baseline.semgrep.json`
 - `outputs/comparison.md`
 
-## Agent Orchestration
+## Architecture
 
 Always-on agents:
 
@@ -35,7 +35,7 @@ Always-on agents:
 
 Conditional agent:
 
-1. `ExtraCategorySpecialistAgent` (runs when profile includes non-core categories)
+1. `ExtraCategorySpecialistAgent` (enabled when non-core categories are present)
 
 ```mermaid
 flowchart LR
@@ -53,27 +53,6 @@ flowchart LR
     F --> I[AI-assisted Compare]
     H --> I
     I --> J[comparison.md]
-```
-
-## Current Evaluation Snapshot
-
-Based on latest files in `outputs/`:
-
-| Metric | Value |
-|---|---:|
-| AI Verified Findings | 11 |
-| Semgrep Verified Findings | 11 |
-| Matched | 6 |
-| AI-only | 5 |
-| Semgrep-only | 5 |
-| Precision | 55% |
-| Recall | 55% |
-
-```mermaid
-pie title Match Distribution (AI vs Semgrep)
-    "Matched" : 6
-    "AI-only" : 5
-    "Semgrep-only" : 5
 ```
 
 ## UI Screenshots
@@ -102,14 +81,14 @@ Settings and Help tab:
 
 | Path | Purpose |
 |---|---|
-| `web_app.py` | Streamlit web UI |
+| `web_app.py` | Streamlit web UI entrypoint |
 | `src/secure_inspector/` | Core pipeline, agents, reporting, baseline, evaluation |
 | `configs/` | Scope/profile/pipeline configuration |
 | `prompts/` | Agent prompt templates + few-shot examples |
 | `data/` | OWASP mapping and secure coding guidance |
 | `outputs/` | Generated artifacts |
-| `tests/` | Unit/integration tests for key pipeline behaviors |
-| `prompt_log.md` | Prompt versions and improvement rationale |
+| `tests/` | Unit tests for core components |
+| `prompt_log.md` | Prompt versions and rationale |
 
 ## Prerequisites
 
@@ -117,31 +96,26 @@ Settings and Help tab:
 - Semgrep available in PATH
 - OpenAI API key
 
-## Local Setup
+## Quick Start
 
 ```powershell
 python -m venv env
 .\env\Scripts\activate
 pip install -e .
-```
-
-## Run Web App
-
-```powershell
 streamlit run web_app.py
 ```
 
-Workflow:
+## Web Workflow
 
 1. Open `Run AI`.
 2. Enter your OpenAI API key (session only).
-3. Upload ZIP of your target repository (or fixed Juice Shop scope).
+3. Upload a repository ZIP.
 4. Run AI pipeline.
-5. Open `Run Baseline` and run Semgrep baseline.
-6. Open `Compare` to compute metrics.
-7. Open `Artifacts` to download final files.
+5. Open `Run Baseline` and run Semgrep.
+6. Open `Compare` to generate metrics and analysis.
+7. Open `Artifacts` to download results.
 
-## CLI Fallback
+## CLI Workflow
 
 Run AI:
 
@@ -161,23 +135,20 @@ Run comparison:
 python -m secure_inspector compare --ai-report outputs/report.json --baseline outputs/baseline.semgrep.json --out outputs/comparison.md
 ```
 
-## Deployment (Streamlit Community Cloud)
+## Deployment (Streamlit Cloud)
 
-1. Push repository to public GitHub.
-2. Create app on Streamlit Cloud.
-3. Set entry file: `web_app.py`.
-4. Deploy and share URL.
+1. Connect the GitHub repository.
+2. Set main file to `web_app.py`.
+3. Deploy.
 
-If hosted Semgrep execution is limited, run baseline locally and keep the generated artifact in `outputs/`.
+If hosted Semgrep execution is restricted, run baseline locally and keep baseline artifact in `outputs/`.
 
-## Security Notes
+## Security
 
-- API key is entered by end users at runtime.
-- The app does not persist user keys.
-- Keep real secrets out of `.env` and source control.
+- API key is entered by users at runtime.
+- The app does not persist API keys.
+- Do not commit real secrets (`.env`, tokens, private keys).
 
-## Roadmap
+## License
 
-- Improve recall for server-side access-control patterns.
-- Add optional second baseline integration (e.g., CodeQL/SonarQube).
-- Add CI pipeline for automated test + lint + artifact checks.
+MIT (see `LICENSE`).
