@@ -5,6 +5,10 @@ AI Workflow: Secure Code Analysis, Semgrep Baseline, and OWASP Comparison.
 Primary interface: Streamlit web app (`web_app.py`)  
 Fallback interface: CLI (`python -m secure_inspector ...`)
 
+## Live App
+
+https://secure-code-aiinspector.streamlit.app/
+
 ## What This Project Does
 
 - Scans a fixed source-code scope from an uploaded ZIP.
