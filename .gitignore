@@ -1,0 +1,38 @@
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyc.*
+*.pyo
+*.pyd
+.pytest_cache/
+.pytest_tmp/
+.pytest_work/
+.mypy_cache/
+.tmp*/
+.tmp_manual_test/
+.manual_validation/
+
+# local secrets
+.env
+.streamlit/secrets.toml
+
+# generated outputs
+outputs/*.json
+outputs/*.md
+!outputs/.gitkeep
+
+# local OCR artifacts
+.tmp_ocr/
+CBRS503 Project.pdf
+
+# local submission files (not pushed)
+submissions/
+*.docx
+*.pptx
+
+# old generic screenshot names
+docs/Screenshot*.png
+
+# archived course assets
+archive/course_materials/

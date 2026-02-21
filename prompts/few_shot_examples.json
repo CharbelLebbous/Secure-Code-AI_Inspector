@@ -1,0 +1,149 @@
+[
+  {
+    "input": {
+      "file_path": "routes/login.ts",
+      "code": "const q = `SELECT * FROM users WHERE email='${email}' AND pass='${pass}'`; db.query(q);"
+    },
+    "output": {
+      "findings": [
+        {
+          "file_path": "routes/login.ts",
+          "line_start": 1,
+          "line_end": 1,
+          "owasp_category": "A03:2021-Injection",
+          "risk_summary": "SQL query is built by string interpolation from untrusted input.",
+          "fix_recommendation": "Use parameterized queries/prepared statements and validate input.",
+          "confidence": 0.93,
+          "evidence": "Interpolated email/pass directly into SQL string."
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "file_path": "routes/orders.ts",
+      "code": "router.get('/orders/:id', async (req,res)=>{ const order = await db.order.findByPk(req.params.id); res.json(order); });"
+    },
+    "output": {
+      "findings": [
+        {
+          "file_path": "routes/orders.ts",
+          "line_start": 1,
+          "line_end": 1,
+          "owasp_category": "A01:2021-Broken Access Control",
+          "risk_summary": "Route fetches object by user-controlled id without ownership authorization check.",
+          "fix_recommendation": "Enforce ownership or role checks before returning object data.",
+          "confidence": 0.9,
+          "evidence": "No authorization logic before response."
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "file_path": "lib/crypto.ts",
+      "code": "const cipher = crypto.createCipheriv('aes-128-ecb', key, null);"
+    },
+    "output": {
+      "findings": [
+        {
+          "file_path": "lib/crypto.ts",
+          "line_start": 1,
+          "line_end": 1,
+          "owasp_category": "A02:2021-Cryptographic Failures",
+          "risk_summary": "Deprecated/insecure cipher mode can expose plaintext patterns.",
+          "fix_recommendation": "Use authenticated encryption mode (e.g., AES-GCM) with proper nonce management.",
+          "confidence": 0.87,
+          "evidence": "ECB mode usage."
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "file_path": "routes/login.ts",
+      "code": "const sql = 'SELECT * FROM users WHERE email = ? AND password = ?'; db.query(sql, [email, password]);"
+    },
+    "output": {
+      "findings": []
+    }
+  },
+  {
+    "input": {
+      "file_path": "routes/orders.ts",
+      "code": "router.get('/orders/:id', async (req,res)=>{ const order = await db.order.findByPk(req.params.id); if (!order || order.userId !== req.user.id) return res.sendStatus(403); res.json(order); });"
+    },
+    "output": {
+      "findings": []
+    }
+  },
+  {
+    "input": {
+      "file_path": "routes/search.ts",
+      "code": "const criteria = req.query.q; models.sequelize.query(`SELECT * FROM Products WHERE name LIKE '%${criteria}%'`);"
+    },
+    "output": {
+      "findings": [
+        {
+          "file_path": "routes/search.ts",
+          "line_start": 1,
+          "line_end": 1,
+          "owasp_category": "A03:2021-Injection",
+          "risk_summary": "User-controlled query input is directly interpolated into a raw SQL string, enabling SQL injection.",
+          "fix_recommendation": "Use parameterized queries/bind parameters instead of string interpolation in the SQL statement.",
+          "confidence": 0.95,
+          "evidence": "Raw SQL query contains `${criteria}` derived from req.query."
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "file_path": "routes/userProfile.ts",
+      "code": "const userInput = req.params.username; const code = userInput.replace(/'/g, \"\"); const value = eval(code);"
+    },
+    "output": {
+      "findings": [
+        {
+          "file_path": "routes/userProfile.ts",
+          "line_start": 1,
+          "line_end": 1,
+          "owasp_category": "A03:2021-Injection",
+          "risk_summary": "User-controlled data flows into eval(), allowing code injection/arbitrary code execution.",
+          "fix_recommendation": "Remove eval on user input and replace with safe parsing/validation logic.",
+          "confidence": 0.95,
+          "evidence": "eval(code) executes value derived from req.params.username."
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "file_path": "server.ts",
+      "code": "app.use('/public/uploads', express.static('uploads', { index: true }));"
+    },
+    "output": {
+      "findings": [
+        {
+          "file_path": "server.ts",
+          "line_start": 1,
+          "line_end": 1,
+          "owasp_category": "A01:2021-Broken Access Control",
+          "risk_summary": "Directory exposure is publicly mounted with listing/index behavior and no access restriction, enabling unauthorized browsing of uploaded content.",
+          "fix_recommendation": "Disable directory listing/indexing and enforce authentication/authorization middleware before this mount.",
+          "confidence": 0.85,
+          "evidence": "Public express.static mount exposes uploads path with index enabled and no auth guard."
+        }
+      ]
+    }
+  },
+  {
+    "input": {
+      "file_path": "server.ts",
+      "code": "app.use('/public/uploads', authzMiddleware, express.static('uploads', { index: false }));"
+    },
+    "output": {
+      "findings": []
+    }
+  }
+]

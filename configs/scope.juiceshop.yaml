@@ -1,0 +1,30 @@
+# Fixed scope for reproducible evaluation.
+# This is now an intentional, linked set of 10 Juice Shop files
+# focused on auth/session, access control, and injection-sensitive flows.
+#
+# Glob syntax quick guide:
+# - "routes/**/*.ts" => all .ts files under routes/ and any nested folders.
+# - "*"  => any characters within one path level.
+# - "**" => any number of nested path levels.
+# - Exact path (e.g., "routes/login.ts") => only that one file.
+include_globs:
+  - "app.ts"
+  - "server.ts"
+  - "lib/insecurity.ts"
+  - "routes/login.ts"
+  - "routes/search.ts"
+  - "routes/currentUser.ts"
+  - "routes/userProfile.ts"
+  - "routes/basket.ts"
+  - "routes/basketItems.ts"
+  - "routes/order.ts"
+
+exclude_globs:
+  - "**/*.spec.*"
+  - "**/*.test.*"
+  - "**/node_modules/**"
+
+# The scanner sorts matched files and keeps the first max_files.
+# Here we intentionally list 10 target files and keep max_files at 10.
+max_files: 10
+max_chunk_lines: 120
